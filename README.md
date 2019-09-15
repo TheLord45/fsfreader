@@ -32,4 +32,5 @@ Parameter|Comment
 ---------|-------
 -f --file|The path and name of the input file. This must be a FSF file.
 -d --directory|Optional. The output directory where the content of the FSF file will be saved. If ths parameter is omitted, the files are written into the current directory.
+-v --verbose|This makes the program very noisy. It prints out how it internaly follows the block structure of the input file.
 -h --help|A small help that explains the available parameters.
