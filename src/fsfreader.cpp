@@ -114,7 +114,7 @@ void usage()
 	cout << "Syntax: " << prgName << " -f <file> [-o <directory>]" << endl << endl;
 	cout << "\t-f <file>          The file to read. This should be a file created by" << endl;
 	cout << "\t--file <file>      TPDesign4. These file have the file extension \".tp4\"." << endl << endl;
-	cout << "\t-o <directory>     Optional: The directory into where the output files" << endl;
+	cout << "\t-d <directory>     Optional: The directory into where the output files" << endl;
 	cout << "\t--directory <dir>  should be written. A TP4 file contains several files." << endl;
 	cout << "\t                   If the directory does not exist, it will be created." << endl << endl;
 }
