@@ -20,7 +20,7 @@
 #include <fstream>
 #include <cstring>
 #include <iomanip>
-#include "amxfilereader.h"
+#include "fsfreader.h"
 #include "readtp4.h"
 #include "expand.h"
 

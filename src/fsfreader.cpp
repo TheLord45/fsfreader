@@ -21,7 +21,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <filesystem>
-#include "amxfilereader.h"
+#include "fsfreader.h"
 #include "readtp4.h"
 
 namespace fs = std::filesystem;
