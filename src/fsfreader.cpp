@@ -38,6 +38,11 @@ int main (int argc, char **argv)
 	string fname, outdir;
 
 	prgName.assign(*argv);
+	size_t pos = prgName.find_last_of("/");
+
+	if (pos != string::npos)
+		prgName = prgName.substr(pos+1);
+
 	version();
 
 	outdir.assign(".");
@@ -117,6 +122,9 @@ void usage()
 	cout << "\t-d <directory>     Optional: The directory into where the output files" << endl;
 	cout << "\t--directory <dir>  should be written. A TP4 file contains several files." << endl;
 	cout << "\t                   If the directory does not exist, it will be created." << endl << endl;
+	cout << "\t-v                 Verbose; Thismakes the program very noisy. The program shows" << endl;
+	cout << "\t--verbose          how it reads the internal block structure." << endl << endl;
+	cout << "\t-h --help          This help." << endl << endl;
 }
 
 void version()
