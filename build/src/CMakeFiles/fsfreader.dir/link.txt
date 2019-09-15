@@ -1,1 +1,0 @@
-/opt/local/bin/g++-mp-8   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/fsfreader.dir/fsfreader.cpp.o CMakeFiles/fsfreader.dir/readtp4.cpp.o CMakeFiles/fsfreader.dir/expand.cpp.o  -o fsfreader  -L/opt/local/lib -Wl,-rpath,/opt/local/lib -lm -lz 
