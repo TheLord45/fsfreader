@@ -18,7 +18,11 @@
 
 #include <iostream>
 #include <fstream>
+#if __GNUC__ < 9
+#include <experimental/filesystem>
+#else
 #include <filesystem>
+#endif
 #include "expand.h"
 #include <assert.h>
 
@@ -108,6 +112,7 @@ int Expand::unzip()
 			{
 				case Z_NEED_DICT:
 					ret = Z_DATA_ERROR;		// and fall through
+                // fall through
 				case Z_DATA_ERROR:
 				case Z_MEM_ERROR:
 					(void)inflateEnd(&strm);

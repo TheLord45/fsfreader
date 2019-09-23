@@ -29,6 +29,7 @@ using namespace std;
 
 string prgName;
 bool verbose;
+bool transfer;
 
 void usage();
 void version();
@@ -43,6 +44,7 @@ int main (int argc, char **argv)
 	if (pos != string::npos)
 		prgName = prgName.substr(pos+1);
 
+	verbose = transfer = false;
 	version();
 
 	outdir.assign(".");
@@ -83,6 +85,9 @@ int main (int argc, char **argv)
 			}
 		}
 
+		if (par.compare("-t") == 0 || par.compare("--transfer") == 0)
+			transfer = true;
+
 		if (par.compare("-v") == 0 || par.compare("--verbose") == 0)
 			verbose = true;
 
@@ -122,6 +127,11 @@ void usage()
 	cout << "\t-d <directory>     Optional: The directory into where the output files" << endl;
 	cout << "\t--directory <dir>  should be written. A TP4 file contains several files." << endl;
 	cout << "\t                   If the directory does not exist, it will be created." << endl << endl;
+	cout << "\t-t                 " << prgName << " creates the needed directory structure and moves all" << endl;
+	cout << "\t--transfer         the extracted file into their right place. This means," << endl;
+	cout << "\t                   that graphic files are moved into \"images\", sound files" << endl;
+	cout << "\t                   into \"sounds\" and fonts into \"fonts\". All other files" << endl;
+	cout << "\t                   remain in the main directory." << endl << endl;
 	cout << "\t-v                 Verbose; Thismakes the program very noisy. The program shows" << endl;
 	cout << "\t--verbose          how it reads the internal block structure." << endl << endl;
 	cout << "\t-h --help          This help." << endl << endl;

@@ -9,7 +9,7 @@ This program is able to read a FSF file and extract all the files in it. If the 
 **If someone know how to decrypt them, I would apreciate this information!**
 
 ## Compile the program
-*fsfreader* was developed on *Linux*. It needs at least a C++ compiler which supports C++17 standard. Because the program makes use of the new **filesystem** methods.
+*fsfreader* was developed on *Linux*. It needs at least a C++ compiler which supports C++17 standard. Because the program makes use of the new **filesystem** methods. **G++9** or newer is perfect. It should compile with older compilers too, but there is no garanty.
 
 You need the following prerequisites:
 
@@ -25,13 +25,14 @@ You need the following prerequisites:
 
 ## How to use the program?
 
-> `Syntax: fsfreader -f <infile> [-d <directory>] [-v] [-h]`
+> `Syntax: fsfreader -f <infile> [-d <directory>] [-t] [-v] [-h]`
   
 ### Parameters
 Parameter|Comment
 ---------|-------
 `-f --file`|The path and name of the input file. This must be a FSF file.
 `-d --directory`|Optional. The output directory where the content of the FSF file will be saved. If ths parameter is omitted, the files are written into the current directory.
+`-t --transfer`|This make **FSFReader** to create a directory structure. All the graphic files are moved to `images`, the sound files are moved to `sounds` and the fonts are moved to `fonts`. The rest remains in the main directory.
 `-v --verbose`|This makes the program very noisy. It prints out how it internaly follows the block structure of the input file.
 `-h --help`|A small help that explains the available parameters.
 

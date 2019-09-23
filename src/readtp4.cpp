@@ -20,10 +20,16 @@
 #include <fstream>
 #include <cstring>
 #include <iomanip>
+#if __GNUC__ < 9
+#include <experimental/filesystem>
+#else
+#include <filesystem>
+#endif
 #include "fsfreader.h"
 #include "readtp4.h"
 #include "expand.h"
 
+namespace fs = std::filesystem;
 using namespace reader;
 using namespace std;
 
@@ -122,7 +128,32 @@ bool ReadTP4::doRead()
 
 		while (act != nullptr)
 		{
-			string ofile = target + "/" + string((char*)act->ublock->filePath);
+			string ofile;
+
+			if (transfer)
+			{
+				string f((char *)act->ublock->filePath);
+				string dir;
+
+				if (f.find(".png") != string::npos || f.find(".jpg") != string::npos ||
+						f.find(".gif") != string::npos || f.find(".tiff") != string::npos)
+					dir = "/images";
+				else if (f.find(".wav") != string::npos || f.find(".mp3") != string::npos)
+					dir = "/sounds";
+				else if (f.find(".ttf") != string::npos)
+					dir = "/fonts";
+
+				if (verbose)
+					cout << "Testing for directory: " << target << dir << endl;
+
+				if (!fs::exists(target+dir))
+					fs::create_directories(target+dir);
+
+				ofile = target + dir + "/" + f;
+			}
+			else
+				ofile = target + "/" + string((char*)act->ublock->filePath);
+
 			cout << "Writing file " << ofile << endl;
 			ofstream of(ofile, ios::out | ios::binary);
 
