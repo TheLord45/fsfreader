@@ -20,6 +20,7 @@
 #include <fstream>
 #include <cstring>
 #include <iomanip>
+#include <bits/stdc++.h>
 #if __GNUC__ < 9
 #include <experimental/filesystem>
 #else
@@ -132,7 +133,13 @@ bool ReadTP4::doRead()
 
 			if (transfer)
 			{
-				string f((char *)act->ublock->filePath);
+				string f(cp1250ToUTF8((char *)act->ublock->filePath));
+				struct MANIFEST mf;
+				mf.size = act->ublock->sizeBytes;
+				mf.tmCreate = act->ublock->tmCreate;
+				mf.tmModify = act->ublock->tmModify;
+				mf.fname.assign(f);
+				manifest.push_back(mf);
 				string dir;
 
 				if (f.find(".png") != string::npos || f.find(".jpg") != string::npos ||
@@ -204,6 +211,30 @@ bool ReadTP4::doRead()
 
 			compressed = false;
 			act = act->next;
+		}
+
+		if (transfer)
+		{
+			ofstream mfStream;
+			string manFileName = target + "/manifest.xma";
+
+			mfStream.open(manFileName, ios::out | ios::binary | ios::trunc);
+			sort(manifest.begin(), manifest.end(), compareManifest);
+			size_t num = manifest.size();
+			size_t cnt = 0;
+
+			for (auto itr = manifest.begin(); itr != manifest.end(); ++itr)
+			{
+				mfStream << itr->size << "|" << itr->tmCreate << "|" << itr->tmModify << "|" << itr->fname;
+				cnt++;
+
+				if (cnt == num)
+					mfStream << "\r";
+				else
+					mfStream << "\r\n";
+			}
+
+			mfStream.close();
 		}
 	}
 	catch (exception& e)
@@ -369,4 +400,96 @@ void ReadTP4::dump (const unsigned char *buf, size_t size)
 	}
 
 	cout << endl << endl;
+}
+
+bool ReadTP4::compareManifest(struct MANIFEST& m1, struct MANIFEST& m2)
+{
+	size_t pos1 = m1.fname.find_last_of(".");
+	size_t pos2 = m2.fname.find_last_of(".");
+	string ext1, ext2;
+	int weight1, weight2;
+
+	if (pos1 != string::npos)
+		ext1 = m1.fname.substr(pos1+1);
+	else
+		ext1 = m1.fname;
+
+	if (pos2 != string::npos)
+		ext2 = m2.fname.substr(pos2+1);
+	else
+		ext2 = m2.fname;
+
+	if (ext1.compare("xma") == 0)
+		weight1 = 1;
+	else if (ext1.compare("xml") == 0)
+		weight1 = 2;
+	else if (ext1.compare("ttf") == 0)
+		weight1 = 3;
+	else if (ext1.compare("png") == 0 || ext1.compare("jpg") == 0 || ext1.compare("gif") == 0)
+		weight1 = 4;
+	else
+		weight1 = 5;
+
+	if (ext2.compare("xma") == 0)
+		weight2 = 1;
+	else if (ext2.compare("xml") == 0)
+		weight2 = 2;
+	else if (ext2.compare("ttf") == 0)
+		weight2 = 3;
+	else if (ext2.compare("png") == 0 || ext2.compare("jpg") == 0 || ext2.compare("gif") == 0)
+		weight2 = 4;
+	else
+		weight2 = 5;
+
+	if (weight1 == weight2)
+		return m1.fname.compare(m2.fname) < 0;
+
+	return weight1 < weight2;
+}
+
+string ReadTP4::cp1250ToUTF8(const string& str)
+{
+	string out;
+
+	for (size_t j = 0; j < str.length(); j++)
+	{
+		int i = -1;
+		unsigned char ch = str.at(j);
+		short utf = -1;
+
+		if (ch < 0x80)
+		{
+			do
+			{
+				i++;
+
+				if (__cht[i].ch == ch)
+				{
+					utf = __cht[i].byte;
+					break;
+				}
+			}
+			while (__cht[i].ch != 0xff);
+
+			if (utf < 0)
+				utf = ch;
+		}
+		else
+			utf = ch;
+
+		if (utf > 0x00ff)
+		{
+			out.push_back((utf >> 8) & 0x00ff);
+			out.push_back(utf & 0x00ff);
+		}
+		else if (ch > 0x7f)
+		{
+			out.push_back(0xc0 | ch >> 6);
+			out.push_back(0x80 | (ch & 0x3f));
+		}
+		else
+			out.push_back(ch);
+	}
+
+	return out;
 }
