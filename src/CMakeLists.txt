@@ -10,10 +10,6 @@ if (DEBUG)
    add_definitions(-g)
 endif(DEBUG)
 
-if (APPLE)
-	SET(CMAKE_CXX_COMPILER /opt/local/bin/g++-mp-8)
-endif(APPLE)
-
 add_definitions(-pedantic -fexceptions -Wextra -std=c++17)
 
 target_link_libraries(fsfreader m ${LIBS})

@@ -18,9 +18,12 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstring>
 #include <iomanip>
+#ifndef __APPLE__
 #include <bits/stdc++.h>
+#endif
 #if __GNUC__ < 9
 #include <experimental/filesystem>
 #else
@@ -370,9 +373,9 @@ uint16_t ReadTP4::makeWord (const unsigned char *buf)
 string ReadTP4::toHex(int num, int width)
 {
 	string ret;
-	std::stringstream stream;
-	stream << std::setfill ('0') << std::setw(width) << std::hex << num;
-	ret = stream.str();
+	std::stringstream s;
+	s << std::setfill ('0') << std::setw(width) << std::hex << num;
+	ret = s.str();
 	return ret;
 }
 
