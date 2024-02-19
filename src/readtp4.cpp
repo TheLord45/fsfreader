@@ -32,6 +32,7 @@
 #include "fsfreader.h"
 #include "readtp4.h"
 #include "expand.h"
+#include "scramble.h"
 
 namespace fs = std::filesystem;
 using namespace reader;
@@ -176,6 +177,7 @@ bool ReadTP4::doRead()
 
 			nextBlock = act->ublock->startBlock;
 			bool compressed = false;
+			bool encrypted = false;
 
 			for (uint32_t i = 0; i < act->ublock->sizeBlocks; i++)
 			{
@@ -183,8 +185,14 @@ bool ReadTP4::doRead()
 				fn.read(reinterpret_cast<char*>(memblock), SIZE_BLOCK);
 				fillBlock(block, memblock);
 
-				if (i == 0 && block.abyData[0] == 0x1f && block.abyData[1] == 0x8b)
-					compressed = true;
+				if (i == 0)
+				{
+					if (block.abyData[0] == 0x1f && block.abyData[1] == 0x8b)
+						compressed = true;
+					else if ((ofile.find(".xma") != string::npos || ofile.find(".xml") != string::npos) &&
+							 block.abyData[0] != '<' && block.abyData[1] != '?')
+						encrypted = true;
+				}
 
 				nextBlock = block.nextBlock;
 				of.write(reinterpret_cast<char*>(block.abyData), block.bytesUsed);
@@ -210,6 +218,26 @@ bool ReadTP4::doRead()
 					cerr << "WARNING: File " << ofile << " was not decompressed!" << endl;
 				else
 					cout << " done" << endl;
+			}
+
+			if (encrypted)
+			{
+				cout << "Decrypting file " << ofile << " ...";
+				Scramble scr;
+				scr.aesInit("8P0puxB5OVUFI6uX", "MarkRobs");
+
+				if (!scr.aesDecodeFile(ofile))
+					cerr << "WARNING: File " << ofile << " was not decrypted!" << endl;
+				else
+				{
+					cout << " done" << endl;
+					// Write buffer to file
+					ofstream outFile;
+					outFile.open(ofile, ios::out | ios::binary | ios::trunc);
+					string decr = scr.getDecrypted();
+					outFile.write(decr.c_str(), decr.length());
+					outFile.close();
+				}
 			}
 
 			compressed = false;

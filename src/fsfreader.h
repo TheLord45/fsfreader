@@ -21,7 +21,7 @@
 
 #include <string>
 
-#define VERSION     "1.0.0"
+#define VERSION     "2.0.0"
 
 extern std::string prgName;
 extern bool verbose;

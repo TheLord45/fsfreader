@@ -2,7 +2,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(fsfreader fsfreader.cpp
                readtp4.cpp
-               expand.cpp)
+               expand.cpp
+               scramble.cpp
+               utils.cpp)
+
+find_package(OpenSSL REQUIRED)
+target_link_libraries(fsfreader OpenSSL::SSL)
 
 add_definitions(-D_GNU_SOURCE)
 

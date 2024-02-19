@@ -140,6 +140,6 @@ void usage()
 void version()
 {
 	cout << prgName << " v" << VERSION << endl;
-	cout << "Copyright 2019 by Andreas Theofilu." << endl;
+	cout << "Copyright 2019, 2024 by Andreas Theofilu." << endl;
 	cout << "GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html" << endl << endl;
 }
