@@ -33,6 +33,9 @@ Parameter|Comment
 `-f --file`|The path and name of the input file. This must be a FSF file (TP4 or TP5).
 `-d --directory`|Optional. The output directory where the content of the FSF file will be saved. If ths parameter is omitted, the files are written into the current directory.
 `-t --transfer`|This make **FSFReader** to create a directory structure. All the graphic files are moved to `images`, the sound files are moved to `sounds` and the fonts are moved to `fonts`. The rest remains in the main directory.
+`-a --alternate`|Use alternate password and salt for TP5 file. This may be useful if the file was repacked by TPControl.
+`-p --password`|Use individual password to decrypt TP5 file.
+`-s --salt`|Use individual salt to decrypt TP5 file.
 `-v --verbose`|This makes the program very noisy. It prints out how it internaly follows the block structure of the input file.
 `-h --help`|A small help that explains the available parameters.
 
