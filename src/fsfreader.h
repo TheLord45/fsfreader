@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 by Andreas Theofilu <andreas@theosys.at>
+ * Copyright (C) 2019, 2024 by Andreas Theofilu <andreas@theosys.at>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,12 @@
 
 #include <string>
 
-#define VERSION     "2.0.0"
+#define VERSION     "2.1.0"
 
 extern std::string prgName;
 extern bool verbose;
 extern bool transfer;
+extern std::string password;
+extern std::string salt;
 
 #endif

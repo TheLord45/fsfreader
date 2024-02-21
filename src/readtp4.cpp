@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 by Andreas Theofilu <andreas@theosys.at>
+ * Copyright (C) 2019, 2024 by Andreas Theofilu <andreas@theosys.at>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -224,7 +224,8 @@ bool ReadTP4::doRead()
 			{
 				cout << "Decrypting file " << ofile << " ...";
 				Scramble scr;
-				scr.aesInit("8P0puxB5OVUFI6uX", "MarkRobs");
+//				scr.aesInit("8P0puxB5OVUFI6uX", "MarkRobs");
+				scr.aesInit(password, salt);
 
 				if (!scr.aesDecodeFile(ofile))
 					cerr << "WARNING: File " << ofile << " was not decrypted!" << endl;

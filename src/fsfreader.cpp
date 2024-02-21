@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 by Andreas Theofilu <andreas@theosys.at>
+ * Copyright (C) 2019, 2024 by Andreas Theofilu <andreas@theosys.at>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ using namespace std;
 string prgName;
 bool verbose;
 bool transfer;
+string password = "8P0puxB5OVUFI6uX";
+string salt = "MarkRobs";
 
 void usage();
 void version();
@@ -97,6 +99,45 @@ int main (int argc, char **argv)
 			exit(0);
 		}
 
+		if (par.compare("-a") == 0 || par.compare("--alternate") == 0)
+		{
+			password = "6Brzh63P3wlAkTtl";
+			salt = "M0rPh3u5";
+			cout << "Using alternate password and salt." << endl << endl;
+		}
+
+		if (par.compare("-p") == 0 || par.compare("--password") == 0)
+		{
+			if (argc > 1)
+			{
+				argc--;
+				argv++;
+				password.assign(*argv);
+				cout << "Using individual password." << endl << endl;
+			}
+			else
+			{
+				usage();
+				return 1;
+			}
+		}
+
+		if (par.compare("-s") == 0 || par.compare("--salt") == 0)
+		{
+			if (argc > 1)
+			{
+				argc--;
+				argv++;
+				salt.assign(*argv);
+				cout << "Using individual salt." << endl << endl;
+			}
+			else
+			{
+				usage();
+				return 1;
+			}
+		}
+
 		argc--;
 		argv++;
 	}
@@ -106,6 +147,20 @@ int main (int argc, char **argv)
 		cerr << "Missing file name to read from." << endl << endl;
 		usage();
 		exit (1);
+	}
+
+	if (password.length() != 16)
+	{
+		cerr << "Password has wrong length of " << password.length() << " characters! Should be 16 characters long." << endl << endl;;
+		usage();
+		return 1;
+	}
+
+	if (salt.length() != 8)
+	{
+		cerr << "Salt has wrong length of " << salt.length() << " characters! Should be 8 characters long." << endl << endl;
+		usage();
+		return 1;
 	}
 
 	if (outdir.length() > 0 && !fs::exists(outdir))
@@ -132,9 +187,28 @@ void usage()
 	cout << "\t                   that graphic files are moved into \"images\", sound files" << endl;
 	cout << "\t                   into \"sounds\" and fonts into \"fonts\". All other files" << endl;
 	cout << "\t                   remain in the main directory." << endl << endl;
+	cout << "\t-a                 Use alternate password and salt for TP5 file. This may be" << endl;
+	cout << "\t--alternate        useful if the file was repacked by TPControl." << endl << endl;
+	cout << "\t-p <password>      Use individual password to decrypt TP5 file." << endl;
+	cout << "\t--password <password>" << endl << endl;
+	cout << "\t-s <salt>          Use individual salt to decrypt TP5 file." << endl;
+	cout << "\t--salt <salt>" << endl << endl;
 	cout << "\t-v                 Verbose; Thismakes the program very noisy. The program shows" << endl;
 	cout << "\t--verbose          how it reads the internal block structure." << endl << endl;
 	cout << "\t-h --help          This help." << endl << endl;
+	cout << "HINT: In TP5 files all XML configuration files are encrypted. If this file was" << endl;
+	cout << "      created by TPDesign5 the default password is necessary to decrypt the" << endl;
+	cout << "      TP5 files. If the file was prepared by TPControl so that the license" << endl;
+	cout << "      was added and maybe the file was renamed, then the alternate password" << endl;
+	cout << "      should be used to decrypt the file." << endl;
+	cout << "      If you created your own files with other password and salt, then you can" << endl;
+	cout << "      set an individual password and salt to decrypt the files. However: You" << endl;
+	cout << "      must use the following credentials to encrypt the files: " << endl;
+	cout << "          Cipher  : AES-128-CBC" << endl;
+	cout << "          Digest  : SHA1" << endl;
+	cout << "          Iterate : 5" << endl;
+	cout << "          Password: 16 characters (letters upper case/lower case and digits)" << endl;
+	cout << "          Salt    : 8 characters (letters upper case/lower case and digits)" << endl << endl;
 }
 
 void version()
