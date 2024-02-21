@@ -19,4 +19,4 @@ add_definitions(-pedantic -fexceptions -Wextra -std=c++17)
 
 target_link_libraries(fsfreader m ${LIBS})
 
-install(TARGETS fsfreader RUNTIME DESTINATION usr)
+install(TARGETS fsfreader RUNTIME)
