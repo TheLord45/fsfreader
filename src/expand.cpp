@@ -18,7 +18,7 @@
 
 #include <iostream>
 #include <fstream>
-#if __GNUC__ < 9
+#if __cplusplus < 201403L
 #include <experimental/filesystem>
 #else
 #include <filesystem>

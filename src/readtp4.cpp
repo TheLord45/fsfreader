@@ -24,7 +24,7 @@
 #ifndef __APPLE__
 #include <bits/stdc++.h>
 #endif
-#if __GNUC__ < 9
+#if __cplusplus < 201403L
 #include <experimental/filesystem>
 #else
 #include <filesystem>
